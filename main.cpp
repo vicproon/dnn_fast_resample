@@ -16,7 +16,8 @@ void output_tensor(const std::string &suffix, const CHWTensor &t)
   {
     cv::Mat c32f(t.height, t.width, CV_32FC1, t.channelPtr(i));
     cv::Mat c8u; c32f.convertTo(c8u, CV_8UC1);
-    cv::imwrite(string("../res/") + cv::format("%03d_", i) + suffix + ".ppm", c8u);
+    cv::Mat c8uc3; cv::cvtColor(c8u, c8uc3, cv::COLOR_GRAY2BGR);
+    cv::imwrite(string("../res/") + cv::format("%03d_", i) + suffix + ".ppm", c8uc3);
   }
 }
 
@@ -27,7 +28,8 @@ void output_tensor_gt(const std::string &suffix, const CHWTensor &t, cv::Size ds
     cv::Mat c32f_small(t.height, t.width, CV_32FC1, t.channelPtr(i));
     cv::Mat c32f; cv::resize(c32f_small, c32f, dst_size);
     cv::Mat c8u; c32f.convertTo(c8u, CV_8UC1);
-    cv::imwrite(string("../res/") + cv::format("%03d_", i) + suffix + ".ppm", c8u);
+    cv::Mat c8uc3; cv::cvtColor(c8u, c8uc3, cv::COLOR_GRAY2BGR);
+    cv::imwrite(string("../res/") + cv::format("%03d_", i) + suffix + ".ppm", c8uc3);
   }
 }
 
@@ -45,9 +47,9 @@ int main()
   // test
   {
     auto start = system_clock::now();
-    auto dst = call_kernel_1(100, &t);
+    auto dst = call_kernel_1(1000, &t);
     auto end = system_clock::now();
-    cout << "100 kernel 1 invokations lasted for " << duration_cast<microseconds> (end - start).count()
+    cout << "1000 kernel 1 invokations lasted for " << duration_cast<microseconds> (end - start).count()
          << "mus\n";
     output_tensor("dst_ker_1", dst);
     output_tensor_gt("gt", t, {dst.width, dst.height});
@@ -55,9 +57,9 @@ int main()
 
   {
     auto start = system_clock::now();
-    auto dst = call_kernel_2(100, &t);
+    auto dst = call_kernel_2(1000, &t);
     auto end = system_clock::now();
-    cout << "100 kernel 2 invokations lasted for " << duration_cast<microseconds> (end - start).count()
+    cout << "1000 kernel 2 invokations lasted for " << duration_cast<microseconds> (end - start).count()
          << "mus\n";
     output_tensor("dst_ker_2", dst);
   } 
