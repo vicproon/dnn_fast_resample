@@ -67,6 +67,9 @@ struct CHWTensor
     t.ctx = Ctx::CPU;
     return t;
   } 
+  
+  CHWTensor(const CHWTensor &) = delete;
+  CHWTensor & operator=(const CHWTensor &) = delete;
 
   CHWTensor(CHWTensor && rhs)
   {
