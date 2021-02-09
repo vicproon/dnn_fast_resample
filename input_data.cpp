@@ -8,7 +8,7 @@
 CHWTensor generate_input_tensor()
 {
   // read input image as HWC 
-  cv::Mat img = cv::imread("/home/prun/Y/box/prun/inference_input/pgr.163.002.000050.png");
+  cv::Mat img = cv::imread("../data/pgr.163.002.000050.png");
   // resize it and duplicate rgb channels so we have 128x20x10 tensor
   cv::Mat small_img; cv::resize(img, small_img, cv::Size(100, 200));
   std::cout << "read image of size " << img.rows << "x" << img.cols << "\n";
